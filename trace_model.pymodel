@@ -1,0 +1,70 @@
+name: "ASE Encoder"
+layer {
+	name: "func_1h"
+	type: "1hot"
+	input: "trace_func"
+	1hot_params{
+		output_size: 32
+	}
+}
+layer{
+	name: "ret_encoder"
+	type: "lstm"
+	input: "trace_ret"
+	lstm_params{
+		input_size: 64
+		output_timestep: -1
+		hidden_size: 256
+		num_layers: 1
+	}
+
+}
+layer {
+	name: "arg_encoder"
+	type: "lstm"
+	input: "trace_arg"
+	lstm_params{
+		input_size: 64
+		output_timestep: -1
+		hidden_size: 256
+		num_layers: 1
+	}
+
+}
+layer {
+	name: "global_encoder"
+	type: "lstm"
+	input: "trace_globals"
+	lstm_params{
+		input_size: 64
+		output_timestep: -1
+		hidden_size: 128
+		num_layers: 1
+	}
+
+}
+layer {
+	name: "line_encoder"
+	type: "lstm"
+	input: "func_1h" + "ret_encoder" + "arg_encoder"
+	lstm_params{
+		input_size: len(input)
+		output_timestep: -1
+		hidden_size: 256
+		num_layers: 1
+	}
+}
+layer {
+	name: "MLP"
+	type: "mlp"
+	input: "line_encoder"
+	mlp_params{
+		in_features: len(input)
+		out_features: [256, 128, 64, 1]
+	}
+}
+layer {
+	name: "Sigmoid"
+	type: "sigmoid"
+	input: "MLP"
+}
