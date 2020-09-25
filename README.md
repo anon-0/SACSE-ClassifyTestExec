@@ -1,6 +1,6 @@
 
 # Supervised Learning over Test Executions as a Test Oracle
-Code supplementary metrial. This repository contains execution traces (both in raw and encoded format) to train from scratch a model on SEAL Encryptor.
+Code supplementary material. This repository contains execution traces (both in raw and encoded format) to train from scratch a model on SEAL Encryptor.
 
 Run
 ```
